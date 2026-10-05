@@ -185,3 +185,8 @@ Technical readiness is not a grade or a submission receipt.
 Prepared and delivered by **Meaad Al-Marri | ميعاد المري** · [Attribution and educational use](NOTICE.md).
 
 The published learner release remains `v1.0.0`. This branch is the controlled bilingual candidate for `v1.1.0`.
+
+## Problem statement (Day 1)
+Estimate the probability that a financing application defaults within 90 days, using only information available at application time. This is a teaching exercise on synthetic data and must not be used for real financing decisions.
+
+**Program:** Advanced Machine Learning Methods (SDA-DSC-211) – SDAIA Academy · https://github.com/SDAIAAcademy
