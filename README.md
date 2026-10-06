@@ -190,3 +190,10 @@ The published learner release remains `v1.0.0`. This branch is the controlled bi
 Estimate the probability that a financing application defaults within 90 days, using only information available at application time. This is a teaching exercise on synthetic data and must not be used for real financing decisions.
 
 **Program:** Advanced Machine Learning Methods (SDA-DSC-211) – SDAIA Academy · https://github.com/SDAIAAcademy
+
+## Day 2 – Honest validation
+- **Leakage removed:** `days_past_due_60` and `collection_calls` are only known after the application, so they were dropped.
+- **Honest split:** 3 time folds, 0 shared customers, and only labels at least 90 days old.
+- **Result:** honest AP ≈ 0.315. Leakage would have inflated AP to 0.999 (+0.688).
+- **Tuning:** a bounded Optuna search (8 trials) gave AP 0.313, so it did not beat the fixed settings.
+- **Limitation:** AP drops to 0.27 in the latest period, and OOF predictions cover 50.39% of rows.
