@@ -48,13 +48,52 @@ Compared three models on 2,000 comparison rows (random stratified split, seed 21
 - **Limitation:** AP drops to 0.27 in the latest period; OOF predictions cover 50.39% of rows.
 
 ### Day 3 – Cost-sensitive decision
-_To be added._
+Policy: loss = 10 × FN + 1 × FP, with at most 12% of applications flagged in every validation period.
+
+| Rule | Threshold | Recall | Precision | Flags | Loss | Capacity |
+|---|---|---|---|---|---|---|
+| Default | 0.500 | 57.8% | 22.1% | 1,005 (19.9%) | 2,403 | ❌ |
+| Lowest loss, no limit | 0.449 | 64.1% | 21.6% | 1,141 (22.6%) | 2,275 | ❌ |
+| **Chosen (capacity-safe)** | **0.6583** | **40.9%** | **29.9%** | **526 (10.4%)** | **2,639** | ✅ |
+
+- **Imbalance:** unweighted, weighted and oversampled models ranked almost the same (AP 0.309–0.316); weights move the threshold, not the ranking.
+- **Accuracy trap:** flagging nobody gives 92.4% accuracy with 0% recall.
+- **Capacity:** periods at 8.4%, 10.9% and 11.9%; the threshold is unchanged for FN cost 8, 10 or 12, so capacity drives the decision.
+- **Regions:** FPR gap 0.65 pp (7.6%–8.3%), but recall ranges 34.6%–48.1% and needs monitoring.
+- **Decision Card:** [reports/DECISION_CARD.md](reports/DECISION_CARD.md)
 
 ### Day 4 – Explainability & calibration
-_To be added._
+Roles frozen before evaluation: fit (2,516) · calibration Jul–Sep 2023 (584) · policy Jan–Mar 2024 (589) · evaluation Jul–Dec 2024 (1,733).
+
+| Probabilities | ROC-AUC | AP | Brier | ECE |
+|---|---|---|---|---|
+| Raw (weighted LightGBM) | 0.771 | 0.259 | 0.113 | 0.147 |
+| **Sigmoid-calibrated** | 0.771 | 0.259 | **0.067** | **0.022** |
+
+- **Drivers:** bureau_score (permutation AP drop 0.127, mean |SHAP| 0.90) and dti (0.069, 0.54); SHAP is in log-odds, not probability points.
+- **Local example:** TR-009585, raw 0.903 → calibrated 0.48; low bureau_score 497 (+2.27) and high dti 1.28 (+1.20).
+- **Stability:** AP 95% interval 0.197–0.338; Brier improvement stays negative (−0.054 to −0.037).
+- **Capacity:** the policy threshold flags 109 of 107 allowed in 2024Q4 → CAPACITY_REVIEW_REQUIRED; not retuned on evaluation.
+- **Report:** [reports/INTERPRETABILITY_REPORT.md](reports/INTERPRETABILITY_REPORT.md)
 
 ### Day 5 – Final model & delivery
-_To be added._
+| Model | Mean AP | Fold SD | Brier | ECE |
+|---|---|---|---|---|
+| LightGBM | 0.345 | 0.043 | 0.066 | 0.023 |
+| XGBoost | 0.353 | 0.029 | 0.066 | 0.023 |
+| **Logistic (chosen)** | **0.392** | 0.030 | **0.063** | 0.019 |
+| Weighted ensemble | 0.389 | 0.029 | 0.063 | 0.018 |
+| Stack | 0.383 | 0.029 | 0.066 | 0.031 |
+
+- **Worth-It Gate: KEEP SINGLE → Logistic Regression.** No ensemble beat it by more than one fold SD; OOF residuals were 0.98–0.99 correlated, so averaging could not fix different errors.
+- **Final policy:** raw OOF threshold 0.1689 (calibrated 0.1223): recall 46.9%, precision 34.3%, 11.4% flagged, loss 1,111; unchanged for FN cost 8–12.
+- **Challenge batch:** 330 of 2,500 above threshold; the 12% full-batch cap keeps **300**. No challenge accuracy is claimed (labels unavailable).
+- **Regions (OOF):** false-positive rate 6.3% (eastern) to 10.3% (western) — descriptive, needs monitoring.
+- **Reproducibility:** REPLAY_MATCH and BUNDLE_BYTES_VERIFIED.
+- **Reports:** [Model Card](reports/MODEL_CARD.md) · [Ensemble decision](reports/ENSEMBLE_DECISION.md) · [Executive summary](PROJECT_README.md) · [Presentation](presentation/final_presentation.pdf)
+
+### Key lesson
+On Day 1 XGBoost looked best on one random split (gap 0.008). After honest, leakage-free validation, the simplest model won clearly. Complexity is not evidence of improvement.
 
 ## 4. How to run
 1. Open a notebook from `notebooks/` in Google Colab.
@@ -67,7 +106,9 @@ No GPU, API key or paid subscription is required.
 ## 5. Repository structure
 | Folder | Content |
 |---|---|
-| `notebooks/` | Executed notebooks for each day |
+| `notebooks/` | Executed notebooks for each day (01–05) |
+| `evidence/` | Daily evidence bundles imported by the Day 5 exporter |
+| `presentation/` | Final five-slide presentation (PDF) |
 | `artifacts/` | CSV, JSON and PNG evidence produced by the labs |
 | `reports/` | Decision Card, Interpretability Report, Model Card |
 | `submission/` | Final predictions and submission files |
