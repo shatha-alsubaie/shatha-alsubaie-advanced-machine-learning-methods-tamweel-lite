@@ -1,0 +1,18 @@
+{
+  "problem_statement": "Estimate the probability that a financing application defaults within 90 days, using only information available at application time. This is a teaching exercise on synthetic data and must not be used for real financing decisions.",
+  "candidate": "XGBoost",
+  "notes": {
+    "evidence": "XGBoost had the highest average precision (0.3338) on 2,000 comparison rows with a 7.9% default rate, compared with 0.3258 for Logistic Regression and 0.3248 for LightGBM.",
+    "limitation": "The difference is very small and comes from one random split. 1,226 customers appear in both development and comparison, so the scores may be too optimistic.",
+    "next_test": "Use time-aware and customer-group validation on Day 2 to check if XGBoost still ranks first."
+  },
+  "exit_answers": [
+    "Defaults are rare (7.9%). ROC-AUC can look good even if the model finds few defaulters, while AP focuses on how well we find the rare positive cases.",
+    "If we used the comparison rows to choose the number of trees, the model would be tuned on them and the final score would be too optimistic."
+  ],
+  "checkpoint": {
+    "status": "READY_FOR_REVIEW",
+    "missing": [],
+    "automatic_grade": null
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "responses": {
+    "global_local": "Globally, permutation importance on 1,733 evaluation requests shows bureau_score (AP drop 0.127) and dti (0.069) dominate, and mean |SHAP| agrees (0.90 and 0.54 log-odds). Locally, request TR-009585 is driven by a low bureau_score of 497 (+2.27) and a high dti of 1.28 (+1.20). Global importance describes the whole sample; a local explanation describes one request and can differ from the global ranking.",
+    "output_units": "SHAP values are in raw log-odds, not probability points: they add up from the base value E[f(X)] = -1.79 to f(x) = 2.23 for this request (additivity error 5.7e-15). A +2.27 contribution is not +227% or +2.27 percentage points. Probabilities are shown separately: raw score 0.903, calibrated 0.48.",
+    "reason_limits": "SHAP explains the fitted model, not real-world causes, and correlated features (income, obligations, savings) can share or swap credit. Gain in training and held-out permutation rank features differently (months_employed is high in gain but near zero in permutation). Reason codes are not proof of fairness or legal compliance, and the data are synthetic.",
+    "calibration_evidence": "Sigmoid calibration was learned only on the Jul-Sep 2023 calibration rows and measured on evaluation. Brier fell from 0.113 to 0.067 and ECE from 0.147 to 0.022, while ROC-AUC (0.771) and AP (0.259) did not change, because calibration changes probability values, not ranking. Bins above 0.4 hold few requests, so they are noisy.",
+    "stability": "With 200 customer-cluster bootstrap replicates, the 95% interval for AP is 0.197 to 0.338, so a single AP value is uncertain. The Brier change stays negative in the whole interval (-0.054 to -0.037), and both evaluation quarters improved (ECE 0.134 to 0.032 and 0.159 to 0.024). The local top three reasons stayed the same when bureau_score moved by +/-1.",
+    "review_capacity": "The policy threshold (raw 0.588, calibrated 0.173) was feasible on policy rows (68 flags vs capacity 70). On evaluation it flags 97 of 100 allowed in 2024Q3 but 109 of 107 in 2024Q4, and the +/-0.02 review band raises this to 109 and 122. Status is CAPACITY_REVIEW_REQUIRED: the threshold must not be retuned on evaluation data; the overrun must be escalated and monitored."
+  },
+  "checkpoint": {
+    "status": "READY_FOR_REVIEW",
+    "missing": [],
+    "no_automatic_grade": true
+  }
+}

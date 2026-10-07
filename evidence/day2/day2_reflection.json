@@ -1,0 +1,14 @@
+{
+  "responses": {
+    "leak_example": "days_past_due_60 is a leaked field: it only exists after the loan is active and the customer misses payments, so it is not available at application time.",
+    "split_reason": "We train on earlier periods and validate on later ones, like real use. Each customer stays on one side only (0 shared customers), and training uses only labels at least 90 days old so the outcome is truly known.",
+    "observed_gap": "Leaky minus clean random AP was +0.688, and clean random minus honest fixed AP was -0.004. These come from 3 related time folds of one synthetic dataset, so they describe this run only and do not prove universal superiority.",
+    "imputer_reason": "Imputation is learned inside each training fold so validation values never influence it. The inner stopping set only chooses the number of trees and is never used to report the final score.",
+    "limitations": "Search budget: only 8 trials on 1,935 rows with 176 defaults, so the chosen parameters may be unstable (tuned AP 0.313 was not better than fixed 0.315). OOF covers only 50.39% of rows, and the 3 folds are related time periods, not independent samples."
+  },
+  "checkpoint": {
+    "status": "READY_FOR_REVIEW",
+    "missing": [],
+    "automatic_grade": null
+  }
+}
