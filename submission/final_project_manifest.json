@@ -155,8 +155,8 @@
       "sha256": "8bf9fbb192b072a7b1e5d8dd158c418e6a8a3f75a53bedcb69fbb88cdc518362"
     },
     "README.md": {
-      "bytes": 12967,
-      "sha256": "3a0ce0dc22a03533f29a6b19da33a0f65092fd7b229a3d79d8f063c7b89fbb9d"
+      "bytes": 23462,
+      "sha256": "1127d28edde2fd3d4441d833235ba90d8fdcbd7b25a4b733ab351183f2c7b0ed"
     },
     "RELEASE_NOTES.md": {
       "bytes": 5088,
@@ -1339,7 +1339,7 @@
       "sha256": "a93a846a9915f58b3bae07ec58548b70b12e13f826373dc910592d0bb97f2653"
     }
   },
-  "content_sha256": "296b0f70ea02dd7e78f08f39df4cec778b9ed6e6367037b92dc9f991c6a762cd",
+  "content_sha256": "90e143a250928b66cb4e21e0ced9efb7ed2994bfae5f3a7503386c2ed23b7c84",
   "seed": 211,
   "environment": {
     "python": "3.13.16",
